@@ -17,3 +17,18 @@
 
 (define (factorial n)
     (product identity 1 inc n))
+
+(define (pi-approx n)
+    (define (floor-to-even k) 
+        (if (even? k)
+            k
+            (- k 1)))
+    (define (ceil-to-even k) 
+        (if (even? k)
+            k
+            (+ 1 k)))
+    (define (term k)
+        (/ (+ 2 (floor-to-even k)) (+ 1 (ceil-to-even k))))
+
+    (* 4.0 (product term 1 inc n))
+)
