@@ -2,10 +2,13 @@
 
 (define (repeated f n)
     (define (iter-repeated i result)
-        (if (= i 0)
+        (if (= i 1)
             result
-            (iter-repeated (- i 1) (compose f f))))
+            (iter-repeated (- i 1) (compose result f))))
     (lambda (x) ((iter-repeated n f) x)))
 
 ((repeated square 2) 5)
 ; 625
+
+((repeated square 3) 5)
+; 390625
