@@ -24,6 +24,6 @@
         (let ((x1 (car s1)) (x2 (car s2)))
           (cond ((= x1 x2) (merge (cdr s1) (cdr s2) (append output (list x1))))
                 ((< x1 x2) (merge (cdr s1) s2 (append output (list x1))))
-                ((< x2 x1) (merge s1 (cdr set2) (append output (list x2))))))))
+                ((< x2 x1) (merge s1 (cdr s2) (append output (list x2))))))))
 
   (merge set1 set2 '()))
