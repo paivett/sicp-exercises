@@ -36,9 +36,9 @@
   (define (make-sum a b) (cons a b))
   (define (addend exp) (car exp))
   (define (augend exp) (cdr exp))
-  (define (deriv-inner exp) 
+  (define (deriv-inner exp var) 
     ; we rename deriv to something else, because in the implementation we need to derive not another sum, but a generic expression
-    (make-sum (deriv (addend exp)) (deriv (augend exp))))
+    (make-sum (deriv (addend exp) var) (deriv (augend exp) var)))
   
   ;; interface to the rest of the system
   (define (tag x) (attach-tag '+ x))
@@ -62,7 +62,7 @@
   (define (make-product-inner a b) (cons a b))
   (define (multiplicand exp) (car exp))
   (define (multiplier exp) (cdr exp))
-  (define (deriv-inner exp)
+  (define (deriv-inner exp var)
     (make-sum
            (make-product (multiplier s)
                          (deriv (multiplicand exp) var))
