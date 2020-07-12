@@ -81,3 +81,31 @@
 (define (multiplier exp) (apply-generic 'multiplier exp))
 (define (multiplicand exp) (apply-generic 'multiplicand exp))
 (define (make-product a b) ((get 'make-product '* ) a b))
+
+; C - Install the exponentiation package
+(define (install-exp-package)
+  ;; internal procedures
+  (define (make-exp-inner base exponent) 
+    (cond ((=number? exponent 0) 1)
+          ((=number? exponent 1) base)  
+          (else (cons base exponent))))
+  (define (base exp) (car exp))
+  (define (exponent exp) (cdr exp))
+  (define (deriv-inner exp var)
+    (make-product
+           (exponent exp)
+           (make-product (make-exponentiation (base exp) (- (exponent exp) 1))
+                         (deriv (base exp) var))))
+  
+  ;; interface to the rest of the system
+  (define (tag x) (attach-tag '** x))
+  (put 'deriv '(**) deriv-inner)
+  (put 'base '(**) base)
+  (put 'exponent '(*) exponent)
+  (put 'make-exponentiation '**
+       (lambda (b e) (tag (make-exp-inner b e))))
+  'done)
+
+(define (base exp) (apply-generic 'base exp))
+(define (exponent exp) (apply-generic 'exponent exp))
+(define (make-exp b e) ((get 'make-exponentiation '** ) b e))
