@@ -109,3 +109,9 @@
 (define (base exp) (apply-generic 'base exp))
 (define (exponent exp) (apply-generic 'exponent exp))
 (define (make-exp b e) ((get 'make-exponentiation '** ) b e))
+
+;D
+; For every package, we should change
+; (put 'deriv op function)
+; for
+; (put op 'deriv function)
