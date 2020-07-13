@@ -4,7 +4,7 @@
       ; some definition of how records are stored
   ))
   (define (get-record records employee-name) ( 
-    ; some implementation    
+    ; some implementation that returns false if the record is not found
   ))
   (define (get-salary record) ( 
     ; some implementation    
@@ -35,3 +35,11 @@
 
 
 (define divA-file (get 'records 'divA-file ))
+
+(define (find-employee-record files name) 
+    (if (null? files)
+        false
+        ((let ((employee-record (get-record (car files) name)))
+              (if (not employee-record)
+                  (find-employee-record (cdr files) name)
+                   employee-record)))))
