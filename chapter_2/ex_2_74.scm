@@ -6,6 +6,9 @@
   (define (get-record records employee-name) ( 
     ; some implementation    
   ))
+  (define (get-salary record) ( 
+    ; some implementation    
+  ))
   
   ;; interface to the rest of the system
   (define (tag-file x) (attach-tag 'divA-file x))
@@ -13,6 +16,7 @@
 
   (put 'get-record 'divA-file (lambda (records ename) (tag-record (get-record records ename))))
   (put 'records 'divA-file (tag-file records-file))
+  (put 'get-salary 'divA-record get-salary)
   'done)
 
 ; This apply-generic looks for the type of the first argument and dispatches accordingly
@@ -27,5 +31,7 @@
 
 ; This is the general interface
 (define (get-record file employee-name) (apply-generic 'get-record file employee-name))
+(define (get-salary record) (apply-generic 'get-salary record))
+
 
 (define divA-file (get 'records 'divA-file ))
