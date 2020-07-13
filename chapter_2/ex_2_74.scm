@@ -43,3 +43,7 @@
               (if (not employee-record)
                   (find-employee-record (cdr files) name)
                    employee-record)))))
+
+; When the company acquires a another company, all new divisions will have to implement their own
+; install-division-?? implementing the get-record, records and get-salary.
+; The only thing that must be coordinated is that they all use a different type-tag.
