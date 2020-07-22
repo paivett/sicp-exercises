@@ -51,7 +51,7 @@
     (let ((proc (get op type-tags)))
       (if proc
           (apply proc (map contents args))
-          (if (> (length args) 2)
+          (if (> (length args) 1)
               (let ((coercion-funcs (get-coercion-funcs type-args)))
                    (cond ((all-same-type type-args)
                           (no-method-error op type-args))
