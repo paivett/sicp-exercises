@@ -4,9 +4,9 @@
 (define (raise-real x) (make-complex-from-real-imag (contents x) 0))
 
 ; Install the coercion table for the tower
-; (put-coercion 'integer 'rational raise-integer)
-; (put-coercion 'rational 'real raise-rational)
-; (put-coercion 'real 'complex raise-real)
+(put-coercion 'integer 'rational raise-integer)
+(put-coercion 'rational 'real raise-rational)
+(put-coercion 'real 'complex raise-real)
 
 (define tower '(integer rational real complex))
 
