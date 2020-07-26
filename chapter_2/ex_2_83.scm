@@ -3,18 +3,16 @@
 (define (raise-rational q) (make-real (/ (numer q) (denom q)))) ; Suppose that number and denom are exposed as public
 (define (raise-real x) (make-complex-from-real-imag (contents x) 0))
 
-; Install the coercion table for the tower
-(put-coercion 'integer 'rational raise-integer)
-(put-coercion 'rational 'real raise-rational)
-(put-coercion 'real 'complex raise-real)
-
-(define tower '(integer rational real complex))
+; Install the generic raise function for every type except the complex
+(put 'raise '(integer) raise-integer)
+(put 'raise '(rational) raise-rational)
+(put 'raise '(real) raise-real)
 
 (define (raise obj)
   (let ((type (type-tag obj)))
-    (let ((tail-types (memq type tower)))
-         (if (and tail-types (> (length tail-types) 1))
-             ((get-coercion type (cadr types)) obj)
+    (let ((raise-type-func (get 'raise type)))
+         (if raise-type-func
+             (raise-type-func obj)
              (error "Cannot raise type" type)))))
 
 ; Another solution could be to provide for each package, a raise operation that knows how to create
