@@ -3,22 +3,35 @@
 (define (raise-rational q) (make-real (/ (numer q) (denom q)))) ; Suppose that number and denom are exposed as public
 (define (raise-real x) (make-complex-from-real-imag (contents x) 0))
 
-; Install the coercion table for the tower
-(put-coercion 'integer 'rational raise-integer)
-(put-coercion 'rational 'real raise-rational)
-(put-coercion 'real 'complex raise-real)
 
-(define tower '(integer rational real complex))
+; Install the generic raise function for every type except the complex
+(put 'raise '(integer) raise-integer)
+(put 'raise '(rational) raise-rational)
+(put 'raise '(real) raise-real)
+
 
 (define (raise obj)
   (let ((type (type-tag obj)))
-    (let ((tail-types (memq type tower)))
-         (if (and tail-types (> (length tail-types) 1))
-             ((get-coercion type (cadr types)) obj)
+    (let ((raise-type-func (get 'raise type)))
+         (if raise-type-func
+             (raise-type-func obj)
              (error "Cannot raise type" type)))))
 
+; This is the tower from the highest to lowest
+(define TOWER '(complex real rational integer))
 
-(define (type> t1 t2) (< (length (memq t1 tower)) (length (memq t2 tower))))
+
+(define (find-first e1 e2 elements)
+  (if (null? elements)
+      (error "List must contain at least one of the elements")
+      (let ((front (car elements)))
+           (cond ((eq? front e1) e1)
+                 ((eq? front e2) e2)
+                 (else (find-first e1 e2 (cdr elements)))))))
+
+
+; t1 is higher that t2 if it is the first appearing in the TOWER hierarchy
+(define (type> t1 t2) (eq? t1 (find-first t1 t2 TOWER)))
 
 
 (define (highest-type types)
@@ -26,9 +39,9 @@
 
 
 (define (raise-to-target target-type obj)
-  (if (type> target-type (type-tag obj))
-      (raise-to-target target-type (raise obj))
-      obj))
+  (if (eq? target-type (type-tag obj))
+      obj
+      (raise-to-target target-type (raise obj))))
 
 
 (define (no-method-error op types)
