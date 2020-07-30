@@ -1,0 +1,12 @@
+(define (adjoin-term term term-list)
+  (if (= (order term) (length term-list))
+      (cons (coeff term) term-list)
+      (adjoin-term term (cons 0 term-list))))
+(define (the-empty-termlist) '())
+; When returning a term, the order is the position of that term, that is, the length of the list
+(define (first-term term-list) (list (- (length term-list) 1) (car term-list)))
+(define (rest-terms term-list) (cdr term-list))
+(define (empty-termlist? term-list) (null? term-list))
+(define (make-term order coeff) (list order coeff))
+(define (order term) (car term))
+(define (coeff term) (cadr term))
